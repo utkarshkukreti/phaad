@@ -6,6 +6,6 @@ describe Phaad do
   end
 
   it "should parse a blank string" do
-    compile("").should == ""
+    compile_statement("").should == ""
   end
 end
