@@ -43,6 +43,21 @@ module Phaad
         emit sexp[1][1][1].inspect
       when :dyna_symbol
         emit process(sexp[1][0])
+      when :binary
+        case sexp[2]
+        when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||'
+          process(sexp[1])
+          emit " #{sexp[2]} "
+          process(sexp[3])
+        when :**
+          emit "pow("
+          process(sexp[1])
+          emit ", "
+          process(sexp[3])
+          emit ")"
+        else
+          raise NotImplementedError, sexp
+        end
       when :var_ref
         if sexp[1][0] == :@kw
            case sexp[1][1]
