@@ -106,6 +106,12 @@ module Phaad
         process_statements(sexp[1]) if sexp[1]
         emit "}\n"
         process sexp[3] if sexp[3]
+      when :if_mod
+        emit "if("
+        process sexp[1]
+        emit ") {\n"
+        process_statements [sexp[2]]
+        emit "}\n"
       when :paren
         emit "("
         if sexp[1].size == 1

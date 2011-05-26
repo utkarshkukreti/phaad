@@ -31,4 +31,8 @@ describe Phaad::Generator, "if" do
     compile_statement("if a then b elsif c then d else e end").should == 
       "if($a) {\n$b;\n} elseif($c) {\n$d;\n} else {\n$e;\n}\n"
   end
+
+  it "should parse one line if statements" do
+    compile_statement("b if a").should == "if($a) {\n$b;\n}\n"
+  end
 end
