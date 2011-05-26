@@ -119,6 +119,18 @@ module Phaad
           emit ", "
           process(sexp[3])
           emit ")"
+        when :=~
+          emit "preg_match("
+          process(sexp[3])
+          emit ", "
+          process(sexp[1])
+          emit ")"
+        when :'!~'
+          emit "!preg_match("
+          process(sexp[3])
+          emit ", "
+          process(sexp[1])
+          emit ")"
         else
           raise NotImplementedError, sexp.inspect
         end

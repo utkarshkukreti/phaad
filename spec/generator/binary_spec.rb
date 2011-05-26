@@ -38,4 +38,9 @@ describe Phaad::Generator, "binary" do
     compile_statement("1 <= 2").should == "1 <= 2"
     compile_statement("1 === 2").should == "1 === 2"
   end
+
+  it "should parse =~ and !~ to preg_match statements" do
+    compile_statement("a =~ b").should == "preg_match($b, $a)"
+    compile_statement("a !~ b").should == "!preg_match($b, $a)"
+  end
 end
