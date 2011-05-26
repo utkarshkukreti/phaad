@@ -43,6 +43,15 @@ module Phaad
         emit sexp[1][1][1].inspect
       when :dyna_symbol
         emit process(sexp[1][0])
+      when :assign
+        process(sexp[1])
+        emit " = "
+        process(sexp[2])
+      when :var_field
+        process(sexp[1])
+      when :@ident
+        emit "$"
+        emit sexp[1]
       when :binary
         case sexp[2]
         when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||'
