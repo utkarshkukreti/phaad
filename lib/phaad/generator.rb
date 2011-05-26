@@ -14,7 +14,10 @@ module Phaad
       end
 
       @emitted = ""
-      @sexp.last.each(&method(:process))
+      @sexp.last.each do |sexp|
+        process(sexp)
+        emit ";\n"
+      end
     end
 
     def emit(str)
