@@ -1,5 +1,3 @@
-module Phaad
-  # Your code goes here...
-end
-
+require 'ripper'
 require 'phaad/cli'
+require 'phaad/generator'
