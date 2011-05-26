@@ -23,6 +23,7 @@ module Phaad
 
     def process(sexp)
       case sexp.first
+      when :void_stmt
       when :@int, :@float
         emit sexp[1]
       when :@tstring_content
