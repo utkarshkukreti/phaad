@@ -133,6 +133,45 @@ module Phaad
         emit ") {\n"
         process_statements [sexp[2]]
         emit "}\n"
+      when :def
+        raise NotImplementedError, sexp.inspect unless sexp[1][0] == :@ident
+        emit "function "
+        emit sexp[1][1]
+        emit "("
+        if sexp[2][0] == :params
+          process sexp[2] # params
+        elsif sexp[2][0] == :paren && sexp[2][1][0] == :params
+          process sexp[2][1]
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+        emit ") {\n"
+        process_statements [sexp[3]]
+        emit "}\n"
+      when :params
+        first = true
+        if sexp[1]
+          sexp[1].each do |param|
+            emit ", " unless first
+            first = false
+
+            process param
+          end
+        end
+
+        if sexp[2]
+          sexp[2].each do |param|
+            emit ", " unless first
+            first = false
+
+            process param[0]
+            emit " = "
+            process param[1]
+          end
+        end
+      when :bodystmt
+        process_statements(sexp[1])
+        # skip rescue and ensure
       when :paren
         emit "("
         if sexp[1].size == 1
