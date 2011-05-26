@@ -108,7 +108,8 @@ module Phaad
         process sexp[3] if sexp[3]
       when :binary
         case sexp[2]
-        when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||'
+        when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||', :==, :'!=', :>, :<,
+            :>=, :<=, :===
           process(sexp[1])
           emit " #{sexp[2]} "
           process(sexp[3])

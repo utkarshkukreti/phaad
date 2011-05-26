@@ -28,4 +28,14 @@ describe Phaad::Generator, "binary" do
     compile_statement("1 + 2 - 3 + 4").should == "1 + 2 - 3 + 4"
     compile_statement("1 + 2 ** 3 ** 4").should == "1 + pow(2, pow(3, 4))"
   end
+
+  it "should parse == != > < >= <= ===" do
+    compile_statement("1 == 2").should == "1 == 2"
+    compile_statement("1 != 2").should == "1 != 2"
+    compile_statement("1 > 2").should == "1 > 2"
+    compile_statement("1 < 2").should == "1 < 2"
+    compile_statement("1 >= 2").should == "1 >= 2"
+    compile_statement("1 <= 2").should == "1 <= 2"
+    compile_statement("1 === 2").should == "1 === 2"
+  end
 end
