@@ -7,17 +7,18 @@ module Phaad
     ##
     # A very primitive repl. Only handles one lines.
     def repl
+      require 'readline'
+
       puts "Type exit to exit."
-      print "> "
-      while (input = gets.chomp) != "exit"
+      while (line = Readline::readline('> ')) != "exit"
         begin
-          puts Phaad::Generator.new(input).emitted
+          Readline::HISTORY.push line
+          puts Phaad::Generator.new(line).emitted
         rescue Exception => e
           puts e
           p e.message
           puts e.backtrace
         end
-        print "> "
       end
     end
   end
