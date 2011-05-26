@@ -89,11 +89,12 @@ module Phaad
         if sexp.first == :if
           emit "if("
         elsif sexp.first == :unless
-          emit "if(!"
+          emit "if(!("
         else
           emit "elseif("
         end
         process sexp[1]
+        emit ")" if sexp.first == :unless
         emit ") {\n"
         process_statements(sexp[2])
         emit "}"
@@ -110,22 +111,25 @@ module Phaad
         process sexp[3] if sexp[3]
       when :if_mod, :unless_mod
         emit "if("
-        emit "!" if sexp.first == :unless_mod
+        emit "!(" if sexp.first == :unless_mod
         process sexp[1]
+        emit ")" if sexp.first == :unless_mod
         emit ") {\n"
         process_statements [sexp[2]]
         emit "}\n"
       when :while, :until
         emit "while("
-        emit "!" if sexp.first == :until
+        emit "!(" if sexp.first == :until
         process sexp[1]
+        emit ")" if sexp.first == :until
         emit ") {\n"
         process_statements sexp[2]
         emit "}\n"
       when :while_mod, :until_mod
         emit "while("
-        emit "!" if sexp.first == :until_mod
+        emit "!(" if sexp.first == :until_mod
         process sexp[1]
+        emit ")" if sexp.first == :until_mod
         emit ") {\n"
         process_statements [sexp[2]]
         emit "}\n"
