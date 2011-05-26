@@ -85,9 +85,11 @@ module Phaad
           process s
           emit ", " unless s == sexp[1].last
         end
-      when :if, :elsif
+      when :if, :elsif, :unless
         if sexp.first == :if
           emit "if("
+        elsif sexp.first == :unless
+          emit "if(!"
         else
           emit "elseif("
         end
@@ -106,8 +108,9 @@ module Phaad
         process_statements(sexp[1]) if sexp[1]
         emit "}\n"
         process sexp[3] if sexp[3]
-      when :if_mod
+      when :if_mod, :unless_mod
         emit "if("
+        emit "!" if sexp.first == :unless_mod
         process sexp[1]
         emit ") {\n"
         process_statements [sexp[2]]

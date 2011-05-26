@@ -35,4 +35,13 @@ describe Phaad::Generator, "if" do
   it "should parse one line if statements" do
     compile_statement("b if a").should == "if($a) {\n$b;\n}\n"
   end
+
+  it "should parse unless statements" do
+    compile_statement("unless a\nb\nend").should == "if(!$a) {\n$b;\n}\n"
+    compile_statement("unless a\nb\nc\nend").should == "if(!$a) {\n$b;\n$c;\n}\n"
+  end
+
+  it "should parse one line if statements" do
+    compile_statement("b unless a").should == "if(!$a) {\n$b;\n}\n"
+  end
 end
