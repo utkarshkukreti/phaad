@@ -14,7 +14,11 @@ module Phaad
       end
 
       @emitted = ""
-      @sexp.last.each do |sexp|
+      process_statements @sexp.last
+    end
+
+    def process_statements(array)
+      array.each do |sexp|
         process(sexp)
         emit ";\n"
       end
@@ -81,6 +85,27 @@ module Phaad
           process s
           emit ", " unless s == sexp[1].last
         end
+      when :if, :elsif
+        if sexp.first == :if
+          emit "if("
+        else
+          emit "elseif("
+        end
+        process sexp[1]
+        emit ") {\n"
+        process_statements(sexp[2])
+        emit "}"
+        if sexp[3]
+          emit " "
+          process sexp[3]
+        else
+          emit "\n"
+        end
+      when :else
+        emit "else {\n"
+        process_statements(sexp[1]) if sexp[1]
+        emit "}\n"
+        process sexp[3] if sexp[3]
       when :binary
         case sexp[2]
         when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||'
