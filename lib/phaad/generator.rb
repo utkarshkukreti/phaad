@@ -106,6 +106,14 @@ module Phaad
         process_statements(sexp[1]) if sexp[1]
         emit "}\n"
         process sexp[3] if sexp[3]
+      when :paren
+        emit "("
+        if sexp[1].size == 1
+          process sexp[1][0]
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+        emit ")"
       when :binary
         case sexp[2]
         when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||', :==, :'!=', :>, :<,
