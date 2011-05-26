@@ -115,6 +115,20 @@ module Phaad
         emit ") {\n"
         process_statements [sexp[2]]
         emit "}\n"
+      when :while, :until
+        emit "while("
+        emit "!" if sexp.first == :until
+        process sexp[1]
+        emit ") {\n"
+        process_statements sexp[2]
+        emit "}\n"
+      when :while_mod, :until_mod
+        emit "while("
+        emit "!" if sexp.first == :until_mod
+        process sexp[1]
+        emit ") {\n"
+        process_statements [sexp[2]]
+        emit "}\n"
       when :paren
         emit "("
         if sexp[1].size == 1
