@@ -20,8 +20,10 @@ module Phaad
       end
     end
 
-    def emit(str)
-      @emitted << str
+    def emit(*strings)
+      strings.each do |string|
+        @emitted << string
+      end
     end
 
     def process(sexp)
@@ -52,6 +54,33 @@ module Phaad
       when :@ident
         emit "$"
         emit sexp[1]
+      when :method_add_arg
+        if sexp[1][0] == :fcall && sexp[1][1][0] == :@ident
+          emit sexp[1][1][1]
+          emit "("
+          process sexp[2][1] if sexp[2][1]
+          emit ")"
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+      when :command
+        if sexp[1][0] == :@ident
+          emit sexp[1][1]
+          emit "("
+          if sexp[2][0] == :args_add_block
+            process sexp[2]
+          else
+            sexp[2].each(&method(:process))
+          end
+          emit ")"
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+      when :args_add_block
+        sexp[1].each do |s|
+          process s
+          emit ", " unless s == sexp[1].last
+        end
       when :binary
         case sexp[2]
         when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||'
@@ -65,21 +94,23 @@ module Phaad
           process(sexp[3])
           emit ")"
         else
-          raise NotImplementedError, sexp
+          raise NotImplementedError, sexp.inspect
         end
       when :var_ref
         if sexp[1][0] == :@kw
-           case sexp[1][1]
-           when 'false', 'true'
-             emit sexp[1][1].upcase
-           when 'nil'
-             emit 'NULL'
-           else
-             raise NotImplementedError, sexp
-           end
+          case sexp[1][1]
+          when 'false', 'true'
+            emit sexp[1][1].upcase
+          when 'nil'
+            emit 'NULL'
+          else
+            raise NotImplementedError, sexp.inspect
+          end
+        elsif sexp[1][0] == :@ident
+          emit "$", sexp[1][1]
         else
           # later
-          raise NotImplementedError, sexp
+          raise NotImplementedError, sexp.inspect
         end
       else
         raise NotImplementedError, sexp.inspect
