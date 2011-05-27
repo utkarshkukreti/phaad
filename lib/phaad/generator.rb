@@ -197,6 +197,14 @@ module Phaad
           raise NotImplementedError, sexp.inspect
         end
         emit ")"
+      when :unary
+        case sexp[1]
+        when :+@, :-@, :~, :'!'
+          emit sexp[1].to_s[0]
+          process sexp[2]
+        else
+          raise NotImplementedError, sexp.inspect
+        end
       when :binary
         case sexp[2]
         when :+, :-, :*, :/, :%, :|, :&, :^, :'&&', :'||', :==, :'!=', :>, :<,
