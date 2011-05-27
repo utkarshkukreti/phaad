@@ -14,18 +14,35 @@ module Phaad
       end
 
       @emitted = ""
-      process_statements @sexp.last
+      @indent_level = 0
+      @indent_with = "  "
+      process_statements @sexp.last, :indent => false
+      @emitted.chomp!
     end
 
-    def process_statements(array)
+    def process_statements(array, options = {})
+      indent unless options[:indent] == false
       array.each do |sexp|
         process(sexp)
-        emit ";\n"
+        should_not_be = [ [:bodystmt, [[:void_stmt]], nil, nil, nil] ]
+        first_should_not_be = [:void_stmt, :def, :bodystmt, :if, :else, :elsif,
+          :unless, :while, :until, :while_mod, :until_mod, :if_mod, :unless_mod]
+        emit ";\n" if !should_not_be.include?(sexp) && !first_should_not_be.include?(sexp.first)
       end
+      outdent unless options[:indent] == false
+    end
+
+    def indent
+      @indent_level += 1
+    end
+
+    def outdent
+      @indent_level -= 1
     end
 
     def emit(*strings)
       strings.each do |string|
+        @emitted << @indent_with * @indent_level if @emitted[-1] == "\n"
         @emitted << string
       end
     end
@@ -170,7 +187,7 @@ module Phaad
           end
         end
       when :bodystmt
-        process_statements(sexp[1])
+        process_statements(sexp[1], :indent => false)
         # skip rescue and ensure
       when :paren
         emit "("

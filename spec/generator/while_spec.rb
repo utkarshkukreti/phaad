@@ -2,19 +2,19 @@ require 'spec_helper'
 
 describe Phaad::Generator, "while" do
   it "should parse while statements" do
-    compile_statement("while a\nb\nend").should == "while($a) {\n$b;\n}\n"
+    compile("while a\nb\nend").should == "while($a) {\n  $b;\n}"
   end
 
   it "should parse one line while statements" do
-    compile_statement("b while a").should == "while($a) {\n$b;\n}\n"
+    compile("b while a").should == "while($a) {\n  $b;\n}"
   end
 
   it "should parse until statements" do
-    compile_statement("until a\nb\nend").should == "while(!($a)) {\n$b;\n}\n"
-    compile_statement("until a + b\nc\nend").should == "while(!($a + $b)) {\n$c;\n}\n"
+    compile("until a\nb\nend").should == "while(!($a)) {\n  $b;\n}"
+    compile("until a + b\nc\nend").should == "while(!($a + $b)) {\n  $c;\n}"
   end
 
   it "should parse one line until statements" do
-    compile_statement("b until a").should == "while(!($a)) {\n$b;\n}\n"
+    compile("b until a").should == "while(!($a)) {\n  $b;\n}"
   end
 end
