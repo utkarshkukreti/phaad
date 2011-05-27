@@ -74,11 +74,13 @@ module Phaad
       when :massign
         lhs = sexp[1]
         rhs = sexp[2]
-        unless rhs.shift == :mrhs_new_from_args && lhs.size == rhs.size
-          raise NotImplementError, sexp.inspect
-        end
+
         # hack, no idea why is the sexp like this.
-        rhs[0] = rhs[0][0]
+        rhs.shift if rhs.first == :mrhs_new_from_args
+        rhs = rhs[0] + [rhs[1]]
+        unless lhs.size == rhs.size
+          raise NotImplementedError, sexp.inspect
+        end
 
         lhs.zip(rhs).each do |l, r|
           process l
