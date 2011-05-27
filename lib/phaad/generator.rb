@@ -26,7 +26,8 @@ module Phaad
         process(sexp)
         should_not_be = [ [:bodystmt, [[:void_stmt]], nil, nil, nil] ]
         first_should_not_be = [:void_stmt, :def, :bodystmt, :if, :else, :elsif,
-          :unless, :while, :until, :while_mod, :until_mod, :if_mod, :unless_mod]
+          :unless, :while, :until, :while_mod, :until_mod, :if_mod, :unless_mod,
+          :massign]
         emit ";\n" if !should_not_be.include?(sexp) && !first_should_not_be.include?(sexp.first)
       end
       outdent unless options[:indent] == false
@@ -70,6 +71,21 @@ module Phaad
         process(sexp[1])
         emit " = "
         process(sexp[2])
+      when :massign
+        lhs = sexp[1]
+        rhs = sexp[2]
+        unless rhs.shift == :mrhs_new_from_args && lhs.size == rhs.size
+          raise NotImplementError, sexp.inspect
+        end
+        # hack, no idea why is the sexp like this.
+        rhs[0] = rhs[0][0]
+
+        lhs.zip(rhs).each do |l, r|
+          process l
+          emit " = "
+          process r
+          emit ";\n"
+        end
       when :var_field
         process(sexp[1])
       when :@ident
