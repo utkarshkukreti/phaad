@@ -86,6 +86,9 @@ module Phaad
           process r
           emit ";\n"
         end
+      when :return
+        emit "return "
+        process sexp[1]
       when :var_field
         process(sexp[1])
       when :@ident
