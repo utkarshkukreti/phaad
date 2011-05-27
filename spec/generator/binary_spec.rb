@@ -24,6 +24,11 @@ describe Phaad::Generator, "binary" do
     compile("true || false").should == "TRUE || FALSE;"
   end
 
+  it "should parse 'and' and 'or'" do
+    compile("true and false").should == "TRUE && FALSE;"
+    compile("true or false").should == "TRUE || FALSE;"
+  end
+
   it "should parse chain of binary statements" do
     compile("1 + 2 - 3 + 4").should == "1 + 2 - 3 + 4;"
     compile("1 + 2 ** 3 ** 4").should == "1 + pow(2, pow(3, 4));"

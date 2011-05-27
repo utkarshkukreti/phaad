@@ -228,6 +228,14 @@ module Phaad
           process(sexp[1])
           emit " #{sexp[2]} "
           process(sexp[3])
+        when :and
+          process(sexp[1])
+          emit " && "
+          process(sexp[3])
+        when :or
+          process(sexp[1])
+          emit " || "
+          process(sexp[3])
         when :**
           emit "pow("
           process(sexp[1])
