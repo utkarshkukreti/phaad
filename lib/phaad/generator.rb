@@ -207,15 +207,28 @@ module Phaad
             process param[1]
           end
         end
-      when :array
+      when :array, :hash
         emit "array("
         if sexp[1]
-          sexp[1].each_with_index do |param, i|
-            process param
-            emit ", " if i < sexp[1].size - 1
+          if sexp[1][0] == :assoclist_from_args
+            process sexp[1]
+          else
+            sexp[1].each_with_index do |param, i|
+              process param
+              emit ", " if i < sexp[1].size - 1
+            end
           end
         end
         emit ")"
+      when :assoclist_from_args
+        sexp[1].each_with_index do |param, i|
+          process param
+          emit ", " if i < sexp[1].size - 1
+        end
+      when :assoc_new
+        process sexp[1]
+        emit " => "
+        process sexp[2]
       when :bodystmt
         process_statements(sexp[1], :indent => false)
         # skip rescue and ensure
