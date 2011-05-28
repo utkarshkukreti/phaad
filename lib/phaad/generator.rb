@@ -27,7 +27,7 @@ module Phaad
         should_not_be = [ [:bodystmt, [[:void_stmt]], nil, nil, nil] ]
         first_should_not_be = [:void_stmt, :def, :bodystmt, :if, :else, :elsif,
           :unless, :while, :until, :while_mod, :until_mod, :if_mod, :unless_mod,
-          :massign]
+          :massign, :class]
         emit ";\n" if !should_not_be.include?(sexp) && !first_should_not_be.include?(sexp.first)
       end
       outdent unless options[:indent] == false
@@ -184,6 +184,16 @@ module Phaad
           raise NotImplementedError, sexp.inspect
         end
         emit ") {\n"
+        process_statements [sexp[3]]
+        emit "}\n"
+      when :class
+        if sexp[1][1][0] != :@const || (sexp[2] && sexp[2][1][0] != :@const)
+          raise NotImplementedError, sexp.inspect
+        end
+        emit "class "
+        emit sexp[1][1][1]
+        emit " extends #{sexp[2][1][1]}" if sexp[2]
+        emit " {\n"
         process_statements [sexp[3]]
         emit "}\n"
       when :params
