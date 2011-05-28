@@ -18,6 +18,7 @@ The following features are currently implemented
 - Assigning variables, both single and multiple at once (`a, b = 1, 2` => `$a = 1;\n$b=2;`)  
 - if, unless, while, and until statements, both in the long and one line form of Ruby
 - Function definitions
+- Arrays, both linear and associative
 
 ## Getting Started
 
