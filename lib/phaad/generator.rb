@@ -207,6 +207,15 @@ module Phaad
             process param[1]
           end
         end
+      when :array
+        emit "array("
+        if sexp[1]
+          sexp[1].each_with_index do |param, i|
+            process param
+            emit ", " if i < sexp[1].size - 1
+          end
+        end
+        emit ")"
       when :bodystmt
         process_statements(sexp[1], :indent => false)
         # skip rescue and ensure
