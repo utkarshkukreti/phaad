@@ -75,6 +75,27 @@ function print_greeting($greeting) {
 complex_hello_world("Utkarsh");
 EOT
 
-  compile(input).should == expected_output.chomp
+    compile(input).should == expected_output.chomp
+  end
+
+  it "should parse this class program" do
+input = <<EOT
+class Foo
+  def bar
+    @came = 1
+    return true
+  end
+end
+EOT
+
+expected_output = <<EOT
+class Foo {
+  function bar() {
+    $this->came = 1;
+    return TRUE;
+  }
+}
+EOT
+    compile(input).should == expected_output.chomp
   end
 end
