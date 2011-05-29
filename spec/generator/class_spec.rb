@@ -14,6 +14,10 @@ describe Phaad::Generator, 'access object variables' do
   it "should allow accessing a.b" do
     compile("a.b").should == "$a->b;"
   end
+
+  it "should allow accessing a.b.c.d.e" do
+    compile("a.b.c.d.e").should == "$a->b->c->d->e;"
+  end
 end
 
 describe Phaad::Generator, 'access object functions' do

@@ -143,14 +143,9 @@ module Phaad
           emit ", " unless s == sexp[1].last
         end
       when :call
-        if sexp[1][0] == :var_ref && sexp[1][1][0] == :@ident && sexp[2] == :"." && 
-          sexp[3][0] == :@ident
-          process sexp[1]
-          emit "->"
-          emit sexp[3][1]
-        else
-          raise NotImplementedError, sexp.inspect
-        end
+        process sexp[1]
+        emit "->"
+        emit sexp[3][1]
       when :command_call
         if sexp[1][0] == :var_ref && sexp[1][1][0] == :@ident && sexp[2] == :"." && 
           sexp[3][0] == :@ident && sexp[4][0] == :args_add_block
