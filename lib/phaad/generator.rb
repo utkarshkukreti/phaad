@@ -54,19 +54,27 @@ module Phaad
       when :@int, :@float
         emit sexp[1]
       when :@tstring_content
-        "\"#{sexp[1]}\""
+        emit "\"#{sexp[1]}\""
       when :string_content 
-        process sexp[1]
+        sexp[1..-1].each_with_index do |exp, i|
+           process exp
+           emit " . " if i < sexp.size - 2
+        end
       when :string_literal
-        emit process(sexp[1])
+        process(sexp[1])
+      when :string_embexpr
+        process sexp[1][0]
       when :regexp_literal
-        emit "\"/#{sexp[1][0][1]}#{process(sexp[2])}\""
+        emit '"/'
+        emit sexp[1][0][1]
+        process sexp[2]
+        emit '"'
       when :@regexp_end
-        sexp[1]
+        emit sexp[1]
       when :symbol_literal
         emit sexp[1][1][1].inspect
       when :dyna_symbol
-        emit process(sexp[1][0])
+        process(sexp[1][0])
       when :assign
         process(sexp[1])
         emit " = "
