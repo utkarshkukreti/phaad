@@ -94,7 +94,8 @@ module Phaad
       when :var_field
         process(sexp[1])
       when :@ident
-        emit "$"
+        no_dollar = ["__NAMESPACE__", "__DIR__", "__METHOD__", "__CLASS__", "__FUNCTION__"]
+        emit "$" unless no_dollar.include?(sexp[1])
         emit sexp[1]
       when :@ivar
         emit "$this->"
@@ -321,6 +322,8 @@ module Phaad
             emit sexp[1][1].upcase
           when 'nil'
             emit 'NULL'
+          when '__FILE__', '__LINE__'
+            emit sexp[1][1]
           else
             raise NotImplementedError, sexp.inspect
           end
