@@ -108,6 +108,13 @@ module Phaad
           emit "("
           process sexp[2][1] if sexp[2][1]
           emit ")"
+        elsif sexp[1][0] == :call && sexp[1][2] == :"." && sexp[1][1][1][0] == :@ident
+          process sexp[1][1][1]
+          emit "->"
+          emit sexp[1][3][1]
+          emit "("
+          process sexp[2][1] if sexp[2][1]
+          emit ")"
         else
           raise NotImplementedError, sexp.inspect
         end
@@ -134,6 +141,27 @@ module Phaad
         sexp[1].each do |s|
           process s
           emit ", " unless s == sexp[1].last
+        end
+      when :call
+        if sexp[1][0] == :var_ref && sexp[1][1][0] == :@ident && sexp[2] == :"." && 
+          sexp[3][0] == :@ident
+          process sexp[1]
+          emit "->"
+          emit sexp[3][1]
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+      when :command_call
+        if sexp[1][0] == :var_ref && sexp[1][1][0] == :@ident && sexp[2] == :"." && 
+          sexp[3][0] == :@ident && sexp[4][0] == :args_add_block
+          process sexp[1]
+          emit "->"
+          emit sexp[3][1]
+          emit "("
+          process sexp[4]
+          emit ")"
+        else
+          raise NotImplementedError, sexp.inspect
         end
       when :if, :elsif, :unless
         if sexp.first == :if
