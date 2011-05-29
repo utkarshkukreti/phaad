@@ -48,4 +48,8 @@ describe Phaad::Generator, "binary" do
     compile("a =~ b").should == "preg_match($b, $a);"
     compile("a !~ b").should == "!preg_match($b, $a);"
   end
+
+  it "should parse << as ." do
+    compile("'foo' << 'bar'").should == '"foo" . "bar";'
+  end
 end

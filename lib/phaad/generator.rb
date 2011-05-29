@@ -320,6 +320,10 @@ module Phaad
           process(sexp[1])
           emit " || "
           process(sexp[3])
+        when :<<
+          process(sexp[1])
+          emit " . "
+          process(sexp[3])
         when :**
           emit "pow("
           process(sexp[1])
