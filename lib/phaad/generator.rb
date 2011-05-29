@@ -253,6 +253,20 @@ module Phaad
           raise NotImplementedError, sexp.inspect
         end
         emit ")"
+      when :aref_field
+        process sexp[1]
+        emit "["
+        process sexp[2] if sexp[2]
+        emit "]"
+      when :aref
+        process sexp[1]
+        emit "["
+        if sexp[2][1].size == 1
+          process sexp[2] if sexp[2][1][0]
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+        emit "]"
       when :unary
         case sexp[1]
         when :+@, :-@, :~, :'!'

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Phaad::Generator, 'array' do
+describe Phaad::Generator, 'array creation' do
   context "linear arrays" do
     it "should create blank array" do
       compile("[]").should == "array();"
@@ -35,5 +35,20 @@ describe Phaad::Generator, 'array' do
   it "should parse a mix of linear and associative arrays" do
     compile("[{}, [], {foo => [1, 2, 3, {}]}]").should ==
       "array(array(), array(), array($foo => array(1, 2, 3, array())));"
+  end
+end
+
+describe Phaad::Generator, 'array access' do
+  context "linear arrays" do
+    it "should allow access" do
+      compile("a[0]") == "$a[0];"
+    end
+  end
+
+  context "associative arrays" do
+    it "should allow access" do
+      compile("a['foo']") == '$a["foo"];'
+      compile("a[:foo]") == '$a["foo"];'
+    end
   end
 end
