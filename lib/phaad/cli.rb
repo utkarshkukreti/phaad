@@ -7,6 +7,10 @@ module Phaad
         on :i, :interactive,  "Run an interactive Phaad REPL"
         on :s, :stdio,        "Fetch, compile, and print a Phaad script over stdio"
         on :e, :eval,         "Compile a string from command line", true
+        on :v, :version,      "Print Phaad version" do
+          puts Phaad::VERSION
+          exit
+        end
       end
 
       if @options.interactive?
@@ -24,7 +28,7 @@ module Phaad
           f << compile(File.read(input_file))
         end
       else
-        puts @options
+        repl
       end
     end
 
