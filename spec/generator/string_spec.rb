@@ -11,6 +11,10 @@ describe Phaad::Generator, 'string' do
       compile('"a #{b} #{foo("bar", :baz)} "').should ==
         '"a " . $b . " " . foo("bar", "baz") . " ";'
     end
+
+    it "should handle empty \#{} properly" do
+      compile('"a #{b} #{} "').should == '"a " . $b . " " . " ";'
+    end
   end
 end
 

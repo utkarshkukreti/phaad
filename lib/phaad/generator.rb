@@ -57,8 +57,10 @@ module Phaad
         emit "\"#{sexp[1]}\""
       when :string_content 
         sexp[1..-1].each_with_index do |exp, i|
-           process exp
-           emit " . " if i < sexp.size - 2
+          unless exp[0] == :string_embexpr && exp[1][0][0] == :void_stmt
+            process exp
+            emit " . " if i < sexp.size - 2
+          end
         end
       when :string_literal
         process(sexp[1])
