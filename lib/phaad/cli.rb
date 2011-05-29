@@ -1,7 +1,35 @@
 module Phaad
   class CLI
     def initialize(argv)
-      repl
+      @options = Slop.parse! argv, :help => true  do
+        banner "Usage: phaad [options] [file]"
+        on :c, :compile,      "Compile to PHP, and save as .php files"
+        on :i, :interactive,  "Run an interactive Phaad REPL"
+        on :s, :stdio,        "Fetch, compile, and print a Phaad script over stdio"
+        on :e, :eval,         "Compile a string from command line", true
+      end
+
+      if @options.interactive?
+        repl
+      elsif @options.eval?
+        puts compile(@options[:eval])
+      elsif @options.stdio?
+        puts "<?php\n"
+        puts compile(STDIN.readlines.join("\n"))
+      elsif @options.compile?
+        input_file = argv.shift
+        output_file = input_file.sub(/\..*?$/, '.php')
+        File.open(output_file, 'w') do |f|
+          f << "<?php\n"
+          f << compile(File.read(input_file))
+        end
+      else
+        puts @options
+      end
+    end
+
+    def compile(input)
+      Phaad::Generator.new(input).emitted
     end
 
     ##
