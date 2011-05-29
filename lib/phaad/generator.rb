@@ -111,6 +111,12 @@ module Phaad
         else
           raise NotImplementedError, sexp.inspect
         end
+      when :ifop
+        process sexp[1]
+        emit " ? "
+        process sexp[2]
+        emit " : "
+        process sexp[3]
       when :command
         if sexp[1][0] == :@ident
           emit sexp[1][1]
