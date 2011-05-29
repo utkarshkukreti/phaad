@@ -99,6 +99,8 @@ module Phaad
       when :@ivar
         emit "$this->"
         emit sexp[1][1..-1]
+      when :@const
+        emit sexp[1]
       when :method_add_arg
         if sexp[1][0] == :fcall && sexp[1][1][0] == :@ident
           emit sexp[1][1][1]
@@ -312,6 +314,7 @@ module Phaad
           raise NotImplementedError, sexp.inspect
         end
       when :var_ref
+        # probably need to remove this
         if sexp[1][0] == :@kw
           case sexp[1][1]
           when 'false', 'true'
@@ -324,6 +327,8 @@ module Phaad
         elsif sexp[1][0] == :@ident
           process sexp[1]
         elsif sexp[1][0] == :@ivar
+          process sexp[1]
+        elsif sexp[1][0] == :@const
           process sexp[1]
         else
           # later
