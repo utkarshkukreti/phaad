@@ -108,10 +108,8 @@ module Phaad
           emit "("
           process sexp[2][1] if sexp[2][1]
           emit ")"
-        elsif sexp[1][0] == :call && sexp[1][2] == :"." && sexp[1][1][1][0] == :@ident
-          process sexp[1][1][1]
-          emit "->"
-          emit sexp[1][3][1]
+        elsif sexp[1][0] == :call 
+          process sexp[1]
           emit "("
           process sexp[2][1] if sexp[2][1]
           emit ")"
