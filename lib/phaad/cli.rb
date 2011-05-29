@@ -36,8 +36,6 @@ module Phaad
       Phaad::Generator.new(input).emitted
     end
 
-    ##
-    # A very primitive repl. Only handles one lines.
     def repl
       require 'readline'
 
