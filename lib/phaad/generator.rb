@@ -215,17 +215,31 @@ module Phaad
         process_statements [sexp[2]]
         emit "}\n"
       when :for
-        emit "foreach("
-        process sexp[2]
-        emit " as "
-        if !sexp[1][0].is_a?(Array)
+        if !sexp[1][0].is_a?(Array) && sexp[2][0] == :dot2 || sexp[2][0] == :dot3
+          emit "for("
           process sexp[1]
-        elsif sexp[1][0].is_a?(Array) && sexp[1].size == 2
-          process sexp[1][0]
-          emit " => "
-          process sexp[1][1]
+          emit " = "
+          process sexp[2][1]
+          emit "; "
+          process sexp[1]
+          emit sexp[2][0] == :dot2 ? " <= " : " < "
+          process sexp[2][2]
+          emit "; "
+          process sexp[1]
+          emit "++"
         else
-          raise NotImplementedError, sexp.inspect
+          emit "foreach("
+          process sexp[2]
+          emit " as "
+          if !sexp[1][0].is_a?(Array)
+            process sexp[1]
+          elsif sexp[1][0].is_a?(Array) && sexp[1].size == 2
+            process sexp[1][0]
+            emit " => "
+            process sexp[1][1]
+          else
+            raise NotImplementedError, sexp.inspect
+          end
         end
         emit ") {\n"
         process_statements sexp[3]
