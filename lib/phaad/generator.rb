@@ -102,6 +102,11 @@ module Phaad
           process r
           emit ";\n"
         end
+      when :opassign
+        raise NotImplementedError, sexp.inspect unless sexp[2][0] == :@op
+        process(sexp[1])
+        emit " #{sexp[2][1]} "
+        process(sexp[3])
       when :return
         emit "return "
         process sexp[1]

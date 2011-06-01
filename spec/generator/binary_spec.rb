@@ -52,4 +52,25 @@ describe Phaad::Generator, "binary" do
   it "should parse << as ." do
     compile("'foo' << 'bar'").should == '"foo" . "bar";'
   end
+
+  context "operator assign" do
+    it "should parse += -= *= /= %=" do
+      compile("a += 1").should == "$a += 1;"
+      compile("a -= 1").should == "$a -= 1;"
+      compile("a *= 1").should == "$a *= 1;"
+      compile("a /= 1").should == "$a /= 1;"
+      compile("a %= 1").should == "$a %= 1;"
+    end
+
+    it "should parse |= &= ^=" do
+      compile("a |= 1").should == "$a |= 1;"
+      compile("a &= 1").should == "$a &= 1;"
+      compile("a ^= 1").should == "$a ^= 1;"
+    end
+
+    it "should parse && ||" do
+      compile("a &&= false").should == "$a &&= FALSE;"
+      compile("a ||= false").should == "$a ||= FALSE;"
+    end
+  end
 end
