@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Phaad::Generator, 'string' do
+  it "should parse empty strings" do
+    compile("''").should == '"";'
+    compile('""').should == '"";'
+  end
   context "escaping" do
     it "should parse double quotes" do
       compile(%q{'"'}).should == %q{"\"";}

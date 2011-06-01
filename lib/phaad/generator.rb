@@ -56,11 +56,15 @@ module Phaad
       when :@tstring_content
         emit "\"#{sexp[1].gsub('"', '\"')}\""
       when :string_content 
-        sexp[1..-1].each_with_index do |exp, i|
-          unless exp[0] == :string_embexpr && exp[1][0][0] == :void_stmt
-            process exp
-            emit " . " if i < sexp.size - 2
+        if sexp.size > 1
+          sexp[1..-1].each_with_index do |exp, i|
+            unless exp[0] == :string_embexpr && exp[1][0][0] == :void_stmt
+              process exp
+              emit " . " if i < sexp.size - 2
+            end
           end
+        else
+          emit '""'
         end
       when :string_literal
         process(sexp[1])
