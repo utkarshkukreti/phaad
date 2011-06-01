@@ -54,7 +54,7 @@ module Phaad
       when :@int, :@float
         emit sexp[1]
       when :@tstring_content
-        emit "\"#{sexp[1]}\""
+        emit "\"#{sexp[1].gsub('"', '\"')}\""
       when :string_content 
         sexp[1..-1].each_with_index do |exp, i|
           unless exp[0] == :string_embexpr && exp[1][0][0] == :void_stmt
