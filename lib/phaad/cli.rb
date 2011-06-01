@@ -7,6 +7,7 @@ module Phaad
         on :i, :interactive,  "Run an interactive Phaad REPL"
         on :s, :stdio,        "Fetch, compile, and print a Phaad script over stdio"
         on :e, :eval,         "Compile a string from command line", true
+        on :w, :watch,        "Watch a Phaad file for changes, and autocompile"
         on :v, :version,      "Print Phaad version" do
           puts Phaad::VERSION
           exit
@@ -26,6 +27,21 @@ module Phaad
         File.open(output_file, 'w') do |f|
           f << "<?php\n"
           f << compile(File.read(input_file))
+        end
+      elsif @options.watch?
+        require 'fssm'
+
+        input_file = argv.shift
+        output_file = input_file.sub(/\..*?$/, '.php')
+        FSSM.monitor(File.dirname(input_file), File.basename(input_file)) do
+          update do
+            puts ">>> Detected changes in #{input_file}"
+            File.open(output_file, 'w') do |f|
+              f << "<?php\n"
+              f << Phaad::Generator.new(File.read(input_file)).emitted
+            end
+            puts ">>> Compiled!"
+          end
         end
       else
         repl
