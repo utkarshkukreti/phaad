@@ -9,6 +9,13 @@ describe Phaad::Generator, 'call a function' do
     compile("f g(a)").should == "f(g($a));"
     compile("a b c d, e, f()").should == "a(b(c($d, $e, f())));"
   end
+
+  it "should not add brackets when calling global and echo" do
+    compile("echo a").should == "echo $a;"
+    compile("echo a, b").should == "echo $a, $b;"
+    compile("global a").should == "global $a;"
+    compile("global a, b").should == "global $a, $b;"
+  end
 end
 
 describe Phaad::Generator, 'define a function' do

@@ -41,35 +41,35 @@ function complex_hello_world($name = "Foo Bar", $greeting = "Howdy") {
   print_greeting($greeting);
   print_name($name);
   if($greeting != "Howdy") {
-    echo("Howdy is cooler!");
+    echo "Howdy is cooler!";
   }
   if(!(1 == 1)) {
-    echo("Impossible");
+    echo "Impossible";
   }
 }
 function print_name($name) {
   if($name == "Foo Bar") {
     $i = 0;
     while($i < 10) {
-      echo("Your name is not 'Foo Bar'");
+      echo "Your name is not 'Foo Bar'";
       $i = $i + 1;
     }
   } elseif($name == "1337") {
     while(TRUE) {
-      echo("l33t");
+      echo "l33t";
     }
   } else {
-    echo($name);
+    echo $name;
   }
 }
 function print_greeting($greeting) {
   if($greeting == "Howdy") {
     complex_hello_world("Foo Bar", "Bug");
     while(!(TRUE)) {
-      echo($greeting);
+      echo $greeting;
     }
   } else {
-    echo($greeting);
+    echo $greeting;
   }
 }
 complex_hello_world("Utkarsh");

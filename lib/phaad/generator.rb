@@ -138,14 +138,15 @@ module Phaad
         process sexp[3]
       when :command
         if sexp[1][0] == :@ident
+          no_brackets = %w{global echo}
           emit sexp[1][1]
-          emit "("
+          emit no_brackets.include?(sexp[1][1]) ? " " : "("
           if sexp[2][0] == :args_add_block
             process sexp[2]
           else
             sexp[2].each(&method(:process))
           end
-          emit ")"
+          emit ")" unless no_brackets.include?(sexp[1][1])
         else
           raise NotImplementedError, sexp.inspect
         end
