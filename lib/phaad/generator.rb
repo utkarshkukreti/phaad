@@ -247,7 +247,7 @@ module Phaad
         end
         emit ") {\n"
         process_statements sexp[3]
-        emit "}"
+        emit "}\n"
       when :def
         raise NotImplementedError, sexp.inspect unless sexp[1][0] == :@ident
         emit "function "
