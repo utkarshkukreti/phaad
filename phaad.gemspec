@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Utkarsh Kukreti"]
   s.email       = ["utkarshkukreti@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/utkarshkukreti/phaad/"
   s.summary     = %q{A beautiful way to write PHP}
   s.description = %q{A beautiful way to write PHP}
 
