@@ -69,7 +69,10 @@ module Phaad
       when :string_literal
         process(sexp[1])
       when :string_embexpr
+        no_brackets = [:var_ref, :method_add_arg, :command]
+        emit "(" unless no_brackets.include?(sexp[1][0][0])
         process sexp[1][0]
+        emit ")" unless no_brackets.include?(sexp[1][0][0])
       when :regexp_literal
         emit '"/'
         emit sexp[1][0][1]

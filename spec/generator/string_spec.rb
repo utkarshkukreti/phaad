@@ -31,6 +31,11 @@ describe Phaad::Generator, 'string' do
         '"a " . $b . " " . foo("bar", "baz") . " ";'
     end
 
+    it "should add brackets to interpolation except simple variable / function calls" do
+      compile('"a #{b + c} d"').should == '"a " . ($b + $c) . " d";'
+      compile('"a #{b(e) + c} d"').should == '"a " . (b($e) + $c) . " d";'
+    end
+
     it "should handle empty \#{} properly" do
       compile('"a #{b} #{} "').should == '"a " . $b . " " . " ";'
     end
