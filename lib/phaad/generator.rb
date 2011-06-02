@@ -121,6 +121,10 @@ module Phaad
         emit sexp[1][1..-1]
       when :@const
         emit sexp[1]
+      when :break
+        emit "break"
+      when :next
+        emit "continue"
       when :method_add_arg
         if sexp[1][0] == :fcall && sexp[1][1][0] == :@ident
           emit sexp[1][1][1]
