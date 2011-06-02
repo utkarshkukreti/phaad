@@ -37,26 +37,26 @@ end
 describe Phaad::Generator, 'define a function' do
   context "normal function" do
     it "should define a function without params" do
-      compile("def f\nend").should start_with("function f()")
+      compile("def f\nend").should == "function f() {\n}"
     end
 
     it "should define a function with basic params" do
-      compile("def f a\nend").should start_with("function f($a)")
-      compile("def f(a)\nend").should start_with("function f($a)")
-      compile("def f a, b\nend").should start_with("function f($a, $b)")
-      compile("def f(a, b)\nend").should start_with("function f($a, $b)")
+      compile("def f a\nend").should == "function f($a) {\n}"
+      compile("def f(a)\nend").should == "function f($a) {\n}"
+      compile("def f a, b\nend").should == "function f($a, $b) {\n}"
+      compile("def f(a, b)\nend").should == "function f($a, $b) {\n}"
     end
 
     it "should define a function with params with default values" do
-      compile("def f a = 4\nend").should start_with("function f($a = 4)")
-      compile("def f a, b = 4\nend").should start_with("function f($a, $b = 4)")
+      compile("def f a = 4\nend").should == "function f($a = 4) {\n}"
+      compile("def f a, b = 4\nend").should == "function f($a, $b = 4) {\n}"
     end
   end
 
   context "static (self) function" do
     it "should define a function with/without params" do
-      compile("def self.f\nend").should start_with("static function f()")
-      compile("def self.f(a, b)\nend").should start_with("static function f($a, $b)")
+      compile("def self.f\nend").should == "static function f() {\n}"
+      compile("def self.f(a, b)\nend").should == "static function f($a, $b) {\n}"
     end
   end
 end

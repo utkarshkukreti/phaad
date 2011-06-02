@@ -27,7 +27,7 @@ module Phaad
         should_not_be = [ [:bodystmt, [[:void_stmt]], nil, nil, nil] ]
         first_should_not_be = [:void_stmt, :def, :bodystmt, :if, :else, :elsif,
           :unless, :while, :until, :while_mod, :until_mod, :if_mod, :unless_mod,
-          :massign, :class, :for, :case]
+          :massign, :class, :for, :case, :defs]
         emit ";\n" if !should_not_be.include?(sexp) && !first_should_not_be.include?(sexp.first)
       end
       outdent unless options[:indent] == false
