@@ -324,6 +324,21 @@ module Phaad
         emit ") {\n"
         process_statements [sexp[3]]
         emit "}\n"
+      when :defs
+        raise NotImplementedError, sexp.inspect unless sexp[3][0] == :@ident
+        emit "static function "
+        emit sexp[3][1]
+        emit "("
+        if sexp[4][0] == :params
+          process sexp[4] # params
+        elsif sexp[4][0] == :paren && sexp[4][1][0] == :params
+          process sexp[4][1]
+        else
+          raise NotImplementedError, sexp.inspect
+        end
+        emit ") {\n"
+        process_statements [sexp[5]]
+        emit "}\n"
       when :class
         if sexp[1][1][0] != :@const || (sexp[2] && sexp[2][1][0] != :@const)
           raise NotImplementedError, sexp.inspect
