@@ -161,9 +161,15 @@ module Phaad
           emit ", " unless s == sexp[1].last
         end
       when :call
-        if sexp[3][1] == "new"
-          emit "new "
-          process sexp[1]
+        if sexp[1][1][0] == :@const
+          if sexp[3][1] == "new"
+            emit "new "
+            process sexp[1]
+          else
+            process sexp[1]
+            emit "::"
+            emit sexp[3][1]
+          end
         else
           process sexp[1]
           emit "->"
@@ -179,9 +185,15 @@ module Phaad
           process sexp[4]
           emit ")"
         elsif sexp[1][0] == :var_ref && sexp[1][1][0] == :@const &&
-          sexp[3][0] == :@ident && sexp[3][1] == "new" && sexp[4][0] == :args_add_block
-          emit "new "
-          process sexp[1]
+          sexp[3][0] == :@ident && sexp[4][0] == :args_add_block
+          if sexp[3][1] == "new"
+            emit "new "
+            process sexp[1]
+          else
+            process sexp[1]
+            emit "::"
+            emit sexp[3][1]
+          end
           emit "("
           process sexp[4]
           emit ")"

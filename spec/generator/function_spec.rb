@@ -24,6 +24,12 @@ describe Phaad::Generator, 'call a function' do
     compile("Foo.new a, b, c").should == "new Foo($a, $b, $c);"
     compile("Foo.new(a, b, c)").should == "new Foo($a, $b, $c);"
   end
+
+  it "should call using :: when a function is called on a Constant" do
+    compile("Foo.bar()").should == "Foo::bar();"
+    compile("Foo.bar a, b, c").should == "Foo::bar($a, $b, $c);"
+    compile("Foo.bar(a, b, c)").should == "Foo::bar($a, $b, $c);"
+  end
 end
 
 describe Phaad::Generator, 'define a function' do
