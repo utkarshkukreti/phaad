@@ -72,5 +72,9 @@ describe Phaad::Generator, "binary" do
       compile("a &&= false").should == "$a &&= FALSE;"
       compile("a ||= false").should == "$a ||= FALSE;"
     end
+
+    it "should parse <<= into .=" do
+      compile("a <<= b").should == "$a .= $b;"
+    end
   end
 end
