@@ -18,6 +18,12 @@ describe Phaad::Generator, 'call a function' do
     compile("var a").should == "var $a;"
     compile("var a, b").should == "var $a, $b;"
   end
+
+  it "should print new ClassName when ClassName.new is called" do
+    compile("Foo.new").should == "new Foo;"
+    compile("Foo.new a, b, c").should == "new Foo($a, $b, $c);"
+    compile("Foo.new(a, b, c)").should == "new Foo($a, $b, $c);"
+  end
 end
 
 describe Phaad::Generator, 'define a function' do
