@@ -23,4 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'fssm', '~>0.2.7'
   s.add_development_dependency 'rspec', '~>2.6.0'
   s.add_development_dependency 'guard-rspec', '~>0.4.3'
+  s.add_development_dependency 'growl_notify', '~>0.0.1' if RUBY_PLATFORM.include?("darwin")
 end
