@@ -24,6 +24,7 @@ describe Phaad::Generator, 'array creation' do
     it "should create simple arrays" do
       compile("{a => :b, 1 => 2, /foo/ => /bar/}").should ==
         'array($a => "b", 1 => 2, "/foo/" => "/bar/");'
+      compile("{a: b, c: 1}").should == 'array("a" => $b, "c" => 1);'
     end
 
     it "should create nested arrays" do

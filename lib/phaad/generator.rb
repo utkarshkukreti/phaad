@@ -82,6 +82,8 @@ module Phaad
         emit sexp[1]
       when :symbol_literal
         emit sexp[1][1][1].inspect
+      when :@label
+        emit sexp[1][0..-2].inspect
       when :dyna_symbol
         process(sexp[1][0])
       when :assign
