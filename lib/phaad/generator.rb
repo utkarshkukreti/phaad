@@ -381,7 +381,7 @@ module Phaad
             process param[1]
           end
         end
-      when :array, :hash
+      when :array, :hash, :bare_assoc_hash
         emit "array("
         if sexp[1]
           if sexp[1][0] == :assoclist_from_args

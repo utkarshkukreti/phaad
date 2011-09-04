@@ -32,6 +32,10 @@ describe Phaad::Generator, 'call a function' do
     compile("Foo.bar a, b, c").should == "Foo::bar($a, $b, $c);"
     compile("Foo.bar(a, b, c)").should == "Foo::bar($a, $b, $c);"
   end
+
+  it "should accept named params and pass it as an array" do
+    compile("Foo.bar :a => 1, 'b' => 2").should == 'Foo::bar(array("a" => 1, "b" => 2));'
+  end
 end
 
 describe Phaad::Generator, 'define a function' do
