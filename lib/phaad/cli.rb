@@ -38,9 +38,13 @@ module Phaad
             puts ">>> Detected changes in #{input_file}"
             File.open(output_file, 'w') do |f|
               f << "<?php\n"
-              f << Phaad::Generator.new(File.read(input_file)).emitted
+              begin
+                f << Phaad::Generator.new(File.read(input_file)).emitted
+                puts ">>> Compiled!"
+              rescue Exception => e
+                puts ">>> Error #{e}"
+              end
             end
-            puts ">>> Compiled!"
           end
         end
       else
