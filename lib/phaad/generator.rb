@@ -50,6 +50,12 @@ module Phaad
 
     def process(sexp)
       case sexp.first
+        
+        
+      when :xstring_literal
+        emit sexp[1][0][1]
+        
+        
       when :void_stmt
       when :@int, :@float
         emit sexp[1]
